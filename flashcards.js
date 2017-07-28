@@ -1,22 +1,16 @@
+//imported external files to run programs
 var basic = require("./BasicCard.js");
 var cloze = require("./ClozeCard.js");
+var cards = require("./cardData.json");
 
+//adding node package to improve user interface
 var inquirer = require("inquirer");
 
-var questions = [
-	{
-		question: "Who was the first president of the United States of America?",
-		answer: "George Washington was the first president of the United States of America.",
-		cloze: "George Washington"
-	},
-	{
-		question: "Who is the current president of the United States of America?",
-		answer: "Donald Trump is the current president of the United States of America",
-		cloze: "Donald Trump"
-	}
-];
+//arrays to hold the cards for the game
+var basicArray = [];
+var clozeArray = [];
 
-var current = 0;
+//variables to track progress of game
 var correct = 0;
 var incorrect = 0;
 
@@ -29,30 +23,94 @@ function initialize() {
 			name: "game"
 		}
 	]).then(function(answer) {
-		if (answer.choice === "Basic") {
+		if (answer.game === "Basic") {
 			basicDisplay();
 		} else {
-			challengeDisplay();
+			console.log("Come back later!");
+			//challengeDisplay();
 		}
 	})
-}
+};
+
+function basicCards() {
+	for (var i = 0; i < cards.questions.length; i++) {
+		newBasicCard = new BasicCard(cards.questions[i].front, cards.questions[i].back);
+
+		basicArray.push(newCard);
+	}
+};
+
+function clozeCards() {
+	for (var i = 0; i < cards.questions.length; i++) {
+		newClozeCard = new ClozeCard(cards.questions[i].fullText, cards.questions[i].back);
+
+		newClozeCard.checkCloze();
+		
+		var partial = newClozeCard.partial();
+
+		clozeArray.push(newCLozeCard);
+	}
+};
+
+
 
 function basicDisplay() {
-	if (current < questions.length) {
+	if (current < basicArray.length) {
 		inquirer.prompt([
 			{
 				type: "input",
-				message: quetions[current].question,
+				message: basicArray[current].front,
 				name: "question"
 			}
 		]).then(function(inquirerResponse) {
-			if(questions[current].cloze.toLowerCase === inquirerResponse.question.toLowerCase) {
-				console.log(questions[current].answer);
+			if(basicArray[current].back.toLowerCase === inquirerResponse.question.toLowerCase) {
+				console.log("Correct!");
 				current++;
 				correct++;
 				basicDisplay();
 			} else {
-				console.log(questions[current].answer);
+				console.log("That is not correct.");
+				current++;
+				incorrect++;
+				basicDisplay();
+			};
+		});
+	} else {
+		console.log("Correct: " + correct);
+		console.log("Incorrect: " + incorrect);
+		inquirer.prompt([
+			{
+				type: "confrim",
+				message: "Play again?",
+				name: "confirm",
+				default: true
+			}
+		]).then(function(inquirerResponse) {
+			if (inquirerResponse.confirm) {
+				reset();
+			} else {
+				console.log("That's okay, come back when you are ready to play again.");
+			};
+		});
+	};
+};
+
+function challengeDisplay() {
+	if (current < clozeArray.length) {
+		inquirer.prompt([
+			{
+				type: "input",
+				message: clozeArray[current].partial,
+				name: "question"
+			}
+		]).then(function(inquirerResponse) {
+			if(clozeArray[current].cloze.toLowerCase === inquirerResponse.question.toLowerCase) {
+				console.log("Correct!");
+				current++;
+				correct++;
+				basicDisplay();
+			} else {
+				console.log("That is not correct.");
 				current++;
 				incorrect++;
 				basicDisplay();
@@ -84,3 +142,7 @@ function reset() {
 	incorrect = 0;
 	initialize();
 };
+
+initialize();
+basicCards();
+clozeCards();
