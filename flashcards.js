@@ -35,11 +35,13 @@ function clozeCards() {
 		var newCard = new ClozeCard(cards.questions[i].fullText, cards.questions[i].back);
 
 		newCard.checkCloze();
-		
-		var partial = newClozeCard.partial();
 
-		clozeArray.push(newCLozeCard);
+		
+
+		clozeArray.push(newCard);
+		// clozeArray.push(newCard.partial);
 	}
+	console.log(clozeArray);
 };
 
 //starting the prompt to begin flashcards
@@ -105,56 +107,56 @@ function basicDisplay() {
 
 
 //jeopardy version of the flashcard game
-// function challengeDisplay() {
-// 	if (current < clozeArray.length) {
-// 		inquirer.prompt([
-// 			{
-// 				type: "input",
-// 				message: clozeArray[current].partial,
-// 				name: "question"
-// 			}
-// 		]).then(function(inquirerResponse) {
-// 			if(clozeArray[current].cloze.toLowerCase === inquirerResponse.question.toLowerCase) {
-// 				console.log("Correct!");
-// 				current++;
-// 				correct++;
-// 				basicDisplay();
-// 			} else {
-// 				console.log("That is not correct.");
-// 				current++;
-// 				incorrect++;
-// 				basicDisplay();
-// 			};
-// 		});
-// 	} else {
-// 		console.log("Correct: " + correct);
-// 		console.log("Incorrect: " + incorrect);
-// 		inquirer.prompt([
-// 			{
-// 				type: "confrim",
-// 				message: "Play again?",
-// 				name: "confirm",
-// 				default: true
-// 			}
-// 		]).then(function(inquirerResponse) {
-// 			if (inquirerResponse.confirm) {
-// 				reset();
-// 			} else {
-// 				console.log("That's okay, come back when you are ready to play again.");
-// 			};
-// 		});
-// 	};
-// };
+function challengeDisplay() {
+	if (current < clozeArray.length) {
+		inquirer.prompt([
+			{
+				type: "input",
+				message: clozeArray[current].partial,
+				name: "question"
+			}
+		]).then(function(inquirerResponse) {
+			if(clozeArray[current].cloze.toLowerCase === inquirerResponse.question.toLowerCase) {
+				console.log("Correct!");
+				current++;
+				correct++;
+				basicDisplay();
+			} else {
+				console.log("That is not correct.");
+				current++;
+				incorrect++;
+				basicDisplay();
+			};
+		});
+	} else {
+		console.log("Correct: " + correct);
+		console.log("Incorrect: " + incorrect);
+		inquirer.prompt([
+			{
+				type: "confrim",
+				message: "Play again?",
+				name: "confirm",
+				default: true
+			}
+		]).then(function(inquirerResponse) {
+			if (inquirerResponse.confirm) {
+				reset();
+			} else {
+				console.log("That's okay, come back when you are ready to play again.");
+			};
+		});
+	};
+};
 
 //restarting the game
-// function reset() {
-// 	current = 0;
-// 	correct = 0;
-// 	incorrect = 0;
-// 	initialize();
-// };
+function reset() {
+	current = 0;
+	correct = 0;
+	incorrect = 0;
+	initialize();
+};
 
 basicCards();
-// clozeCards();
+clozeCards();
 
 initialize();
