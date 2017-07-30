@@ -1,6 +1,6 @@
 //imported external files to run programs
-var basic = require("./BasicCard.js");
-var cloze = require("./ClozeCard.js");
+var BasicCard = require("./BasicCard.js");
+var ClozeCard = require("./ClozeCard.js");
 var cards = require("./cardData.json");
 
 //adding node package to improve user interface
@@ -11,9 +11,38 @@ var basicArray = [];
 var clozeArray = [];
 
 //variables to track progress of game
+var current = 0;
 var correct = 0;
 var incorrect = 0;
 
+//building the two types of cards
+function basicCards() {
+	for (var i = 0; i < cards.questions.length; i++) {
+		newCard = new BasicCard(cards.questions[i].front, cards.questions[i].back);
+
+		// console.log(newCard);
+
+		basicArray.push(newCard);
+	};
+	
+	// console.log(basicArray);
+};
+
+
+
+function clozeCards() {
+	for (var i = 0; i < cards.questions.length; i++) {
+		var newCard = new ClozeCard(cards.questions[i].fullText, cards.questions[i].back);
+
+		newCard.checkCloze();
+		
+		var partial = newClozeCard.partial();
+
+		clozeArray.push(newCLozeCard);
+	}
+};
+
+//starting the prompt to begin flashcards
 function initialize() {
 	inquirer.prompt([
 		{
@@ -32,28 +61,7 @@ function initialize() {
 	})
 };
 
-function basicCards() {
-	for (var i = 0; i < cards.questions.length; i++) {
-		newBasicCard = new BasicCard(cards.questions[i].front, cards.questions[i].back);
-
-		basicArray.push(newCard);
-	}
-};
-
-function clozeCards() {
-	for (var i = 0; i < cards.questions.length; i++) {
-		newClozeCard = new ClozeCard(cards.questions[i].fullText, cards.questions[i].back);
-
-		newClozeCard.checkCloze();
-		
-		var partial = newClozeCard.partial();
-
-		clozeArray.push(newCLozeCard);
-	}
-};
-
-
-
+//basic flashcard game
 function basicDisplay() {
 	if (current < basicArray.length) {
 		inquirer.prompt([
@@ -95,54 +103,58 @@ function basicDisplay() {
 	};
 };
 
-function challengeDisplay() {
-	if (current < clozeArray.length) {
-		inquirer.prompt([
-			{
-				type: "input",
-				message: clozeArray[current].partial,
-				name: "question"
-			}
-		]).then(function(inquirerResponse) {
-			if(clozeArray[current].cloze.toLowerCase === inquirerResponse.question.toLowerCase) {
-				console.log("Correct!");
-				current++;
-				correct++;
-				basicDisplay();
-			} else {
-				console.log("That is not correct.");
-				current++;
-				incorrect++;
-				basicDisplay();
-			};
-		});
-	} else {
-		console.log("Correct: " + correct);
-		console.log("Incorrect: " + incorrect);
-		inquirer.prompt([
-			{
-				type: "confrim",
-				message: "Play again?",
-				name: "confirm",
-				default: true
-			}
-		]).then(function(inquirerResponse) {
-			if (inquirerResponse.confirm) {
-				reset();
-			} else {
-				console.log("That's okay, come back when you are ready to play again.");
-			};
-		});
-	};
-};
 
-function reset() {
-	current = 0;
-	correct = 0;
-	incorrect = 0;
-	initialize();
-};
+//jeopardy version of the flashcard game
+// function challengeDisplay() {
+// 	if (current < clozeArray.length) {
+// 		inquirer.prompt([
+// 			{
+// 				type: "input",
+// 				message: clozeArray[current].partial,
+// 				name: "question"
+// 			}
+// 		]).then(function(inquirerResponse) {
+// 			if(clozeArray[current].cloze.toLowerCase === inquirerResponse.question.toLowerCase) {
+// 				console.log("Correct!");
+// 				current++;
+// 				correct++;
+// 				basicDisplay();
+// 			} else {
+// 				console.log("That is not correct.");
+// 				current++;
+// 				incorrect++;
+// 				basicDisplay();
+// 			};
+// 		});
+// 	} else {
+// 		console.log("Correct: " + correct);
+// 		console.log("Incorrect: " + incorrect);
+// 		inquirer.prompt([
+// 			{
+// 				type: "confrim",
+// 				message: "Play again?",
+// 				name: "confirm",
+// 				default: true
+// 			}
+// 		]).then(function(inquirerResponse) {
+// 			if (inquirerResponse.confirm) {
+// 				reset();
+// 			} else {
+// 				console.log("That's okay, come back when you are ready to play again.");
+// 			};
+// 		});
+// 	};
+// };
+
+//restarting the game
+// function reset() {
+// 	current = 0;
+// 	correct = 0;
+// 	incorrect = 0;
+// 	initialize();
+// };
+
+basicCards();
+// clozeCards();
 
 initialize();
-basicCards();
-clozeCards();
