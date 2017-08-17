@@ -41,7 +41,7 @@ function clozeCards() {
 		clozeArray.push(newCard);
 		// clozeArray.push(newCard.partial);
 	}
-	console.log(clozeArray);
+	//console.log(clozeArray);
 };
 
 //starting the prompt to begin flashcards
@@ -57,8 +57,7 @@ function initialize() {
 		if (answer.game === "Basic") {
 			basicDisplay();
 		} else {
-			console.log("Come back later!");
-			//challengeDisplay();
+			challengeDisplay();
 		}
 	})
 };
@@ -73,8 +72,9 @@ function basicDisplay() {
 				name: "question"
 			}
 		]).then(function(inquirerResponse) {
-			if(basicArray[current].back.toLowerCase === inquirerResponse.question.toLowerCase) {
+			if(basicArray[current].back.toLowerCase() === inquirerResponse.question.toLowerCase()) {
 				console.log("Correct!");
+				console.log(basicArray[current].back.toLowerCase());
 				current++;
 				correct++;
 				basicDisplay();
@@ -116,7 +116,7 @@ function challengeDisplay() {
 				name: "question"
 			}
 		]).then(function(inquirerResponse) {
-			if(clozeArray[current].cloze.toLowerCase === inquirerResponse.question.toLowerCase) {
+			if(clozeArray[current].cloze.toLowerCase() === inquirerResponse.question.toLowerCase()) {
 				console.log("Correct!");
 				current++;
 				correct++;
