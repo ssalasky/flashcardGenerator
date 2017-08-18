@@ -36,12 +36,9 @@ function clozeCards() {
 
 		newCard.checkCloze();
 
-		
-
 		clozeArray.push(newCard);
-		// clozeArray.push(newCard.partial);
+		clozeArray.push(newCard.partial());
 	}
-	//console.log(clozeArray);
 };
 
 //starting the prompt to begin flashcards
@@ -112,7 +109,7 @@ function challengeDisplay() {
 		inquirer.prompt([
 			{
 				type: "input",
-				message: clozeArray[current].partial,
+				message: clozeArray[current].partialText,
 				name: "question"
 			}
 		]).then(function(inquirerResponse) {

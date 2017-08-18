@@ -9,6 +9,7 @@ var ClozeCard = function(text, cloze) {
 		this.partial = function() {
 			if (this.checkCloze) {
 				var res = this.fullText.replace(this.cloze, " .. ");
+				this.partialText = res;
 			} else {
 				console.log("Oops, " + this.cloze + " is not in " + this.fullText + " .");
 			};
